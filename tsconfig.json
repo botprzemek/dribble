@@ -7,7 +7,9 @@
     "module": "ES2022",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "paths": {},
+    "paths": {
+      "@/models/*": [ "src/models/*" ],
+    },
     "rootDir": "./",
     "strict": true,
     "skipLibCheck": true,
