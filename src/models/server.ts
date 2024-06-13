@@ -1,6 +1,6 @@
 import { Logger } from "@/models/logger";
 import { Config } from "@/config";
-import { Game } from "@/models/game";
+import { Manager } from "@/models/game/manager";
 
 import { createServer, Server as HttpServer } from "http";
 import { Socket, Server as WebSocket } from "socket.io";
@@ -11,8 +11,8 @@ export namespace Server {
     }
 
     export class WS extends Logger {
-        protected readonly socket: WebSocket;
-        protected readonly games: Game[];
+        protected readonly io: WebSocket;
+        protected readonly manager: Manager.Game;
 
         constructor(host?: string, port?: number, options?: Options) {
             super("%s [ SERVER ] %s");
@@ -24,29 +24,29 @@ export namespace Server {
                     this.listen
                 );
         
-            this.socket = new WebSocket(
+            this.io = new WebSocket(
                 server,
                 options ?? { connectionStateRecovery: {} } as Options
-            ).on("connection", this.connect);
-            
-            this.games = [];
+            );
+            this.manager = new Manager.Game;
+
+            this.io.on("connection", this.connect);
         }
 
         protected listen = (): void => {
             this.log("Server started");
-            this.games.push(new Game());
         };
 
         protected connect = (socket: Socket): void => {
-
-
             this.log(`Client connected (${socket.id})`);
             
             socket.on("message", (message: string): void => {
                 this.log(`Recived message: ${message} (From ${socket.id})`);
-                this.socket.emit("message", message);
+                this.io.emit("message", message);
             });
-        
+
+            socket.on("game:start", this.manager.add);
+
             socket.on("disconnect", (): void => {
                 this.log(`Client disconnected (${socket.id})`);
             });

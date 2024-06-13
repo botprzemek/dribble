@@ -1,3 +1,5 @@
+import { Manager } from "@/models/game/manager";
+
 export namespace Timer {
     const LENGTH = {
         QUARTER: 10 * 60 * 1000,
@@ -19,8 +21,7 @@ export namespace Timer {
                 return;
             }
             
-            console.log("\n\n\n\n\n\n\n");
-            console.table(this.format());
+            Manager.Game.get().log(this.format().toString());
             this.milliseconds -= 10;
         }
     

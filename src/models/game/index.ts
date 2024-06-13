@@ -1,21 +1,23 @@
 import { Quarter } from "@/models/game/quarter";
 import { Logger } from "@/models/logger";
 
-export enum Status {
-    
-}
-
 export class Game extends Logger {
+    private readonly id: number;
     private readonly quarters: Quarter[];
 
-    constructor() {
-        super("%s [  GAME  ] %s");
-        this.quarters = Array.from({ length: 4 }, (_, i) => new Quarter(i + 1));
+    constructor(id: number) {
+        super(`%s [ GAME:${id} ] %s`);
         
-        this.log("Started a Game");
-        this.getQuarter(1)
+        this.id = id;
+        this.quarters = Array.from({ length: 4 }, (_, i) => new Quarter(i + 1));
+    
+        this.getQuarter(0)
             .getTimer()
             .start();
+    }
+
+    public getId = (): number => {
+        return this.id;
     }
 
     public getQuarter = (number: number): Quarter => {

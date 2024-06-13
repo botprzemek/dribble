@@ -13,7 +13,7 @@ export class Logger {
         ]
     }
 
-    protected log = (...parameters: Array<string | number | Error>): void => {
+    public log = (...parameters: Array<string | number | Error>): void => {
         console.log(this.format, this.time(new Date()).join(":"), ...parameters);
     }
 }

@@ -1,20 +1,20 @@
 {
-  "compileOnSave": true,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "paths": {
-      "@/*": [ "src/*" ],
+    "compileOnSave": true,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "ES2022",
+        "moduleResolution": "node",
+        "outDir": "./dist",
+        "paths": {
+            "@/*": [ "src/*" ],
+        },
+        "rootDir": "./",
+        "strict": true,
+        "skipLibCheck": true,
+        "target": "ES2022"
     },
-    "rootDir": "./",
-    "strict": true,
-    "skipLibCheck": true,
-    "target": "ES2022"
-  },
-  "include": ["./**/*"],
-  "exclude": ["./node_modules"]
+    "include": ["./**/*"],
+    "exclude": ["./node_modules"]
 }

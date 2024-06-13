@@ -1,4 +1,5 @@
 import { Timer } from "@/models/game/timer";
+import { Manager } from "@/models/game/manager";
 
 export class Quarter {
     private number: number;
@@ -10,6 +11,7 @@ export class Quarter {
     }
 
     public getNumber = (): number => {
+        Manager.Game.get().log("My Quarter Number!");
         return this.number;
     }
 
