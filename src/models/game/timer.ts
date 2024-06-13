@@ -19,6 +19,8 @@ export namespace Timer {
                 return;
             }
             
+            console.log("\n\n\n\n\n\n\n");
+            console.table(this.format());
             this.milliseconds -= 10;
         }
     

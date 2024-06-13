@@ -29,10 +29,6 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@socket.io/cluster-adapter": "^0.2.2",
-    "@types/express": "^4.17.21",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
     "socket.io": "^4.7.5"
   }
 }

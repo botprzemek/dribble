@@ -1,4 +1,4 @@
-import { Timer } from "@/models/timer";
+import { Timer } from "@/models/game/timer";
 
 export class Quarter {
     private number: number;

@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "paths": {
-      "@/models/*": [ "src/models/*" ],
+      "@/*": [ "src/*" ],
     },
     "rootDir": "./",
     "strict": true,
