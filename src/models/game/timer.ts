@@ -1,4 +1,4 @@
-import { Manager } from "@/models/game/manager";
+import { Handler } from "@/models/handler";
 
 export namespace Timer {
     const LENGTH = {
@@ -7,35 +7,44 @@ export namespace Timer {
     }
 
     class Timer {
-        protected id: number | NodeJS.Timeout;
-        protected milliseconds: number = 0;
+        private handler: Handler.Game;
+
+        private id: number | NodeJS.Timeout;
+        private milliseconds: number = 0;
     
-        constructor(length: number) {
+        constructor(handler: Handler.Game, length: number) {
+            this.handler = handler;
             this.id = 0;
             this.milliseconds = length;
         }
     
-        run = (): void => {
+        interval = (): void => {
             if (this.milliseconds === 0) {
-                this.toggle();
+                const quarter = this.handler.getGame().getActiveQuarter();
+                
+                if (!quarter) {
+                    return;
+                }
+                
+                quarter.end();
                 return;
             }
             
-            Manager.Game.get().log(this.format().toString());
             this.milliseconds -= 10;
         }
     
-        start = (): void => {
-            this.id = setInterval(this.run, 10);
+        run = (): void => {
+            this.id = setInterval(this.interval, 10);
         }
     
         toggle = (): void => {
-            if (this.id) {
-                this.stop();
+            const quarter = this.handler.getGame().getActiveQuarter();
+            
+            if (!quarter) {
                 return;
             }
-    
-            this.start();
+
+            this.id ? quarter.pause() : quarter.run();
         }
     
         stop = (): void => {
@@ -51,14 +60,14 @@ export namespace Timer {
     }
 
     export class Quarter extends Timer {
-        constructor() {
-            super(LENGTH.QUARTER);
+        constructor(handler: Handler.Game) {
+            super(handler, LENGTH.QUARTER);
         }
     }
 
     export class ShotClock extends Timer {
-        constructor() {
-            super(LENGTH.SHOT_CLOCK);
+        constructor(handler: Handler.Game) {
+            super(handler, LENGTH.SHOT_CLOCK);
         }
     }
 }

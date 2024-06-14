@@ -39,28 +39,19 @@ export namespace Server {
 
         protected connect = (socket: Socket): void => {
             this.log(`Client connected (${socket.id})`);
-            
-            socket.on("message", (message: string): void => {
-                this.log(`Recived message: ${message} (From ${socket.id})`);
-                this.io.emit("message", message);
-            });
-
-            socket.on("game:start", this.manager.add);
 
             socket.on("disconnect", (): void => {
                 this.log(`Client disconnected (${socket.id})`);
             });
-        }
 
-        protected receive = (data: Buffer): void => {
-        }
-
-        public send = (host: string, port: number, data: any): void => {
+            socket.on("game:create", (): void => {
+                this.manager.add(this.io, socket);
+            });
         }
 
         public close = (): void => {
             this.log("Server stopped");
-            this.socket.close();
+            this.io.close();
         }
 
         protected error = (error: Error): void => {

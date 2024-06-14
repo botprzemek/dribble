@@ -1,32 +1,27 @@
-import { Logger } from "@/models/logger";
 import { Game as GameInstance } from "@/models/game";
 
+import { Socket, Server as WebSocket } from "socket.io";
+import { UUID, randomUUID } from "crypto";
+
 export namespace Manager {
-    export class Game extends Logger {
-        private static manager: Game;
-        private readonly games: { [ id: number ]: GameInstance };
-        private next: number;
+    export class Game {
+        readonly games: { [ id: UUID ]: GameInstance };
 
         constructor() {
-            super("%s [ %s ] %s");
-            this.games = [];
-            this.next = 0;
+            this.games = {};
         }
 
-        public static get = (): Game => {
-            if (!Game.manager) {
-                Game.manager = new Game();
-            }
-            
-            return Game.manager;
+        public add = (io: WebSocket, socket: Socket): void => {
+            const id: UUID = randomUUID();
+            this.games[id] = new GameInstance(io, socket, id);
         }
 
-        public add = (): void => {
-            this.games[this.next] = new GameInstance(this.next++);
+        public get = (id: UUID): GameInstance | undefined => {
+            return this.games[id];
         }
         
-        public delete = (game: GameInstance): void => {
-            delete this.games[game.getId()]
+        public delete = (id: UUID): void => {
+            delete this.games[id];
         }
     }
 }
