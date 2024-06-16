@@ -2,7 +2,7 @@ import { Handler } from "@/models/handler";
 
 export namespace Timer {
     const LENGTH = {
-        QUARTER: 10 * 60 * 1000,
+        QUARTER: 6 * 1000,
         SHOT_CLOCK: 24 * 1000
     }
 
@@ -30,11 +30,12 @@ export namespace Timer {
                 return;
             }
             
-            this.milliseconds -= 10;
+            this.milliseconds -= 50;
+            this.handler.send("game:timer", this.format());
         }
     
         run = (): void => {
-            this.id = setInterval(this.interval, 10);
+            this.id = setInterval(this.interval, 50);
         }
     
         toggle = (): void => {

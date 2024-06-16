@@ -3,27 +3,27 @@ import { Timer } from "@/models/game/timer";
 
 enum State {
     IDLING,
-    PREPERING,
+    PREPARING,
     STARTING,
     RUNNING,
     PAUSING,
     ENDING
 }
 
-const QUARTER_EVENT = "game:state";
+const QUARTER_EVENT: string = "game:state";
 
 export class Quarter {
-    private handler: Handler.Game;
+    private readonly handler: Handler.Game;
 
-    private number: number;
+    private readonly number: number;
+    private readonly timer: Timer.Quarter;
     private state: State;
-    private timer: Timer.Quarter;
 
     constructor(handler: Handler.Game, number: number) {
         this.handler = handler;
         this.number = number;
-        this.state = State.IDLING;
         this.timer = new Timer.Quarter(this.handler);
+        this.state = State.IDLING;
     }
 
     public idle = (): Quarter => {
@@ -33,7 +33,7 @@ export class Quarter {
     }
 
     public prepare = (): Quarter => {
-        this.state = State.PREPERING;
+        this.state = State.PREPARING;
         this.handler.send(QUARTER_EVENT, `Quarter ${this.number + 1} prepared`, this.getState());
 
         return this;
@@ -50,7 +50,7 @@ export class Quarter {
         this.run();
 
         return this;
-    } 
+    }
 
     public run = (): Quarter => {
         this.timer.run();
@@ -59,7 +59,7 @@ export class Quarter {
         this.handler.send(QUARTER_EVENT, `Quarter ${this.number + 1} ran`, this.getState());
 
         return this;
-    } 
+    }
 
     public pause = (): Quarter => {
         if (this.isPausing()) {
@@ -72,7 +72,7 @@ export class Quarter {
         this.handler.send(QUARTER_EVENT, `Quarter ${this.number + 1} paused`, this.getState());
 
         return this;
-    } 
+    }
 
     public end = (): Quarter => {
         this.timer.stop();
@@ -90,7 +90,7 @@ export class Quarter {
     }
 
     public isPreparing = (): boolean => {
-        return this.state === State.PREPERING;
+        return this.state === State.PREPARING;
     }
 
     public isStarting = (): boolean => {
@@ -113,11 +113,11 @@ export class Quarter {
         return this.number;
     }
 
-    public getTimer = (): Timer.Quarter => {
-        return this.timer;
-    }
-
     public getState = (): State => {
         return this.state;
+    }
+
+    public getTimer = (): Timer.Quarter => {
+        return this.timer;
     }
 }

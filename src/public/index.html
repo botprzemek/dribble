@@ -1,6 +1,48 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <body>
+    <p class="status">Not connected</p>
+    <header>
+      <button class="create">Create a game</button>
+      <input type="text" placeholder="Game ID">
+      <button class="join">Join a game</button>
+    </header>
+    <h1>Game</h1>
+    <button class="start">Start</button>
+    <button class="pause">Pause</button>
+    <p>
+      ID
+      <span class="id"></span>
+    </p>
+    <p>
+      State
+      <span class="state"></span>
+    </p>
+    <p>
+      Timer
+      <span class="timer"></span>
+    </p>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-    <script>const socket = io();</script>
+    <script>
+      const socket = io("ws://127.0.0.1:3000/");
+
+      const status = document.querySelector(".status");
+      const create = document.querySelector(".create");
+      const join = document.querySelector(".join");
+      const start = document.querySelector(".start");
+      const pause = document.querySelector(".pause");
+      const id = document.querySelector(".id");
+      const state = document.querySelector(".state");
+      const timer = document.querySelector(".timer");
+
+      socket.on("connect", () => status.innerText = "Connected");
+
+      create.addEventListener("click", () => socket.emit("game:create"));
+      start.addEventListener("click", () => socket.emit("game:start", id.innerText));
+
+      socket.on("game:create", (...args) => id.innerText = args[0]);
+      socket.on("game:state", (...args) => state.innerText = args[0]);
+      socket.on("game:timer", (...args) => timer.innerText = args[0]);
+    </script>
   </body>
 </html>

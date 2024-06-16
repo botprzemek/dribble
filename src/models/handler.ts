@@ -1,4 +1,5 @@
 import { Game as GameInstance } from "@/models/game";
+import { Quarter } from "@/models/game/quarter";
 
 import { Socket, Server as WebSocket } from "socket.io";
 import { UUID } from "crypto";
@@ -16,7 +17,8 @@ export namespace Handler {
             this.game = game;
 
             this.join(this.game.getId());
-            this.send("game:state", "Created a Game", this.game.getId());
+
+            this.send("game:create", this.game.getId());
 
             this.on("game:start", this.start);
         }
@@ -46,15 +48,19 @@ export namespace Handler {
                 return;
             }
 
-            const quarter = this.game.getActiveQuarter();
+            if (this.getGame().isPregame()) {
+                this.getGame().ingame();
+            }
+
+            const quarter: Quarter | undefined = this.getGame().getActiveQuarter();
             
             if (!quarter) {
                 return;
             }
-            
-            quarter.start();
 
             this.send("game:state", "Started a Game");
+            
+            quarter.start();
         }
     }
 }

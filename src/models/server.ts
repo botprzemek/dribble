@@ -1,13 +1,17 @@
-import { Logger } from "@/models/logger";
-import { Config } from "@/config";
-import { Manager } from "@/models/game/manager";
+import {Logger} from "@/models/logger";
+import {Config} from "@/config";
+import {Manager} from "@/models/game/manager";
 
-import { createServer, Server as HttpServer } from "http";
-import { Socket, Server as WebSocket } from "socket.io";
+import {createServer, Server as HttpServer} from "http";
+import {Socket, Server as WebSocket} from "socket.io";
 
 export namespace Server {
     export type Options = {
         connectionStateRecovery: Object
+        cors: {
+            origin: string;
+            methods: Array<"GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH">
+        }
     }
 
     export class WS extends Logger {
@@ -23,10 +27,16 @@ export namespace Server {
                     host ?? Config.Server().HOST,
                     this.listen
                 );
-        
+
             this.io = new WebSocket(
                 server,
-                options ?? { connectionStateRecovery: {} } as Options
+                options ?? {
+                    connectionStateRecovery: {},
+                    cors: {
+                        origin: "*",
+                        methods: ["GET", "POST"]
+                    }
+                } as Options
             );
             this.manager = new Manager.Game;
 

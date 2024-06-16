@@ -18,6 +18,8 @@ export namespace Statistics {
             }
 
             public attempt(made?: boolean): number {
+                game.isActive;
+
                 this.attempted++;
                 if (made) {
                     this.made++;

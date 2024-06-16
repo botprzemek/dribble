@@ -1,4 +1,4 @@
-import { Statistics } from "@/models/statistics";
+import { Statistics } from "@/models/game/statistics";
 
 export namespace Person {
     class Person {

@@ -8,9 +8,7 @@
     "build": "npx tsc",
     "start": "tsx .",
     "dev": "tsx watch .",
-    "master": "tsx watch ./src/master.ts",
-    "worker": "tsx watch ./src/worker.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \\\"Error: no test.txt specified\\\" && exit 1"
   },
   "repository": {
     "type": "git",

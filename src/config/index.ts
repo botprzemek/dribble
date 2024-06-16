@@ -1,10 +1,10 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
 
 export namespace Config {
-    const NEWLINES_MATCH = /\r\n|\n|\r/
-    const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
+    const NEWLINES_MATCH: RegExp = /\r\n|\n|\r/
+    const RE_INI_KEY_VAL: RegExp = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
 
     const parse = (source: Buffer) => {
         const variables: { [ key: string ]: any } = {};
@@ -17,15 +17,14 @@ export namespace Config {
                 if (!matches) {
                     return;
                 }
-                
-                const key = matches[1];
-                const value = matches[2];
+
+                const value: string = matches[2];
 
                 if (!value) {
                     return;
                 }
 
-                variables[key] = value;
+                variables[matches[1]] = value;
             }
         );
 
@@ -33,21 +32,29 @@ export namespace Config {
     }
 
     const load = (): void => {
+        let variables: { [ key: string ]: any } = {};
         const filePath: string = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", ".env");
-        const buffer: Buffer = readFileSync(filePath);
-        const variables = parse(buffer);
 
-        const set = (key: string): void => {
-            if (process.env[key] || process.env[key] === variables[key]){
-                return;
+        try {
+            const buffer: Buffer = readFileSync(filePath);
+
+            variables = parse(buffer);
+
+            const set = (key: string): void => {
+                if (process.env[key] || process.env[key] === variables[key]){
+                    return;
+                }
+
+                process.env[key] = variables[key];
             }
 
-            process.env[key] = variables[key];
+            Object
+              .keys(variables)
+              .map(set);
         }
-  
-        Object
-            .keys(variables)
-            .map(set);
+        catch (error: any) {
+            writeFileSync(filePath, "HOST = 127.0.0.1\nPORT = 3000\n");
+        }
     }
     
     export type Server = {

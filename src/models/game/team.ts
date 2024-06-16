@@ -1,4 +1,4 @@
-import { Person } from "@/models/person";
+import { Person } from "@/models/game/person";
 
 export class Team {
     private readonly players: Person.Player[]

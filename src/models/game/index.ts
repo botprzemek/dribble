@@ -17,10 +17,14 @@ export class Game {
 
     private readonly id: UUID;
     private readonly quarters: Quarter[];
+    private state: State;
 
     constructor(io: WebSocket, socket: Socket, id: UUID) {
         this.id = id;
+        this.state = State.PREGAME;
+
         this.handler = new Handler.Game(io, socket, this);
+
         this.quarters = Array.from(
             { length: QUARTER_AMOUNT },
             (_, number: number): Quarter => { 
@@ -33,6 +37,33 @@ export class Game {
 
     public getId = (): UUID => {
         return this.id;
+    }
+
+    public pregame = (): Game => {
+        this.state = State.PREGAME;
+        return this;
+    }
+
+    public ingame = (): Game => {
+        this.state = State.INGAME;
+        return this;
+    }
+
+    public postgame = (): Game => {
+        this.state = State.POSTGAME;
+        return this;
+    }
+
+    public isPregame = (): boolean => {
+        return this.state === State.PREGAME;
+    }
+
+    public isIngame = (): boolean => {
+        return this.state === State.INGAME;
+    }
+
+    public isPostgame = (): boolean => {
+        return this.state === State.POSTGAME;
     }
 
     public getActiveQuarter = (): Quarter | undefined => {
