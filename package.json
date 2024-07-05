@@ -2,7 +2,7 @@
   "name": "dribble",
   "version": "1.0.0",
   "description": "D.R.I.B.B.L.E. - Dynamic Real-time Interactive Basketball Live Environment",
-  "main": "./src/server.ts",
+  "main": "./src/server",
   "type": "module",
   "scripts": {
     "build": "npx tsc",
@@ -22,11 +22,7 @@
   "homepage": "https://github.com/not-byte/dribble#readme",
   "devDependencies": {
     "@types/node": "^20.14.2",
-    "@types/socket.io": "^3.0.2",
     "tsx": "^4.15.2",
     "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "socket.io": "^4.7.5"
   }
 }
