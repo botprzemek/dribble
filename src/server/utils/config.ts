@@ -1,6 +1,7 @@
 import {readFileSync, writeFileSync} from "fs";
 import {fileURLToPath} from "url";
 import {dirname, join} from "path";
+import * as process from "node:process";
 
 export interface Server {
     HOST: string,
@@ -17,14 +18,14 @@ const DEFAULT: { [key: string]: Server } = {
 const NEWLINES_MATCH: RegExp = /\r\n|\n|\r/
 const RE_INI_KEY_VAL: RegExp = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
 
-function format(type: string, key: string, value: string | number): string {
-    return `${type.toUpperCase()}_${key.toUpperCase()}=${value}\n`;
+function format(key: string, value: string | number): string {
+    return `${key.toUpperCase()}=${value}\n`;
 }
 
 function generate(): string {
     return Object.entries(DEFAULT).map(([type, config]): string => {
         return Object.entries(config).map(([key, value]): string => {
-            return format(type, key, value);
+            return format(key, value);
         }).join("");
     }).join("");
 }
@@ -53,21 +54,21 @@ function parse(source: Buffer): { [key: string]: any } {
     return variables;
 }
 
-function load(): void {
-    const path: string = join(dirname(fileURLToPath(import.meta.url)), "../..", ".env");
+function load(configType: string, fileName: string): void {
+    const path: string = join(dirname(fileURLToPath(import.meta.url)), "../..", fileName);
 
     try {
         const buffer: Buffer = readFileSync(path);
         const variables = parse(buffer);
 
-        Object.entries(variables).forEach(([key, value]) => set(key, value));
+        Object.entries(variables).forEach(([key, value]) => set(`${configType}_${key}`, value));
     } catch (error) {
         writeFileSync(path, generate());
     }
 }
 
 export function Server(): Server {
-    load();
+    load("SERVER", ".env.server");
 
     return {
         HOST: !process.env.SERVER_HOST
