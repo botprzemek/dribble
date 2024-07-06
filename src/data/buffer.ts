@@ -1,9 +1,10 @@
-const SEVEN_BITS_INTEGER_MARKER: number = 0x7E;
-const SIXTEEN_BITS_INTEGER_MARKER: number = 0x7F;
+const SEVEN_BITS_MARKER: number = 0x7e;
+const SIXTEEN_BITS_MARKER: number = 0x7f;
 
-const MAXIMUM_SIXTEEN_BITS_INTEGER: number = 2 ** 16;
-const MASK_KEY_BYTES_LENGTH: number = 0x04;
-const OPCODE_TEXT: number = 0x01;
+const MASK_KEY: number = 0x04;
+const OP_CODE: number = 0x01;
+
+const MAX_SIZE: number = 2 ** 16;
 
 function encode(buffers: Buffer[], length: number): Buffer {
     const target: Buffer = Buffer.alloc(length);
@@ -18,33 +19,34 @@ function encode(buffers: Buffer[], length: number): Buffer {
 }
 
 export function decode(encoded: Buffer, mask: Buffer): Buffer {
-    const buffer: Buffer = Buffer.from(encoded);
+    const buffer: Buffer = encoded;
 
     for (let i: number = 0; i < encoded.length; i++) {
-        buffer[i] = encoded[i] ^ mask[i % MASK_KEY_BYTES_LENGTH];
+        buffer[i] = encoded[i] ^ mask[i % MASK_KEY];
     }
 
     return buffer;
 }
 
-// TODO
-export function prepareMessage(message: Object): Buffer {
+export function read(message: Object): Buffer {
     const messageBuffer: Buffer = Buffer.from(JSON.stringify(message));
 
-    if (messageBuffer.length > MAXIMUM_SIXTEEN_BITS_INTEGER) {
-        throw new Error("Received message is too long! This server does not handle 64-bit messages!");
+    if (messageBuffer.length > MAX_SIZE) {
+        throw new Error(
+            "Received message is too long! This server does not handle 64-bit messages!",
+        );
     }
 
-    const byte: number = 0x80 | OPCODE_TEXT;
+    const byte: number = 0x80 | OP_CODE;
     let frameBuffer: Buffer;
 
-    if (messageBuffer.length <= SEVEN_BITS_INTEGER_MARKER) {
+    if (messageBuffer.length <= SEVEN_BITS_MARKER) {
         frameBuffer = Buffer.from([byte].concat(messageBuffer.length));
     } else {
         const targetBuffer: Buffer = Buffer.allocUnsafe(0x4);
 
         targetBuffer[0] = byte;
-        targetBuffer[1] = SIXTEEN_BITS_INTEGER_MARKER | 0x0;
+        targetBuffer[1] = SIXTEEN_BITS_MARKER | 0x0;
 
         targetBuffer.writeUint16BE(messageBuffer.length, 2);
         frameBuffer = targetBuffer;
