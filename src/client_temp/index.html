@@ -12,23 +12,25 @@
     const HOST = "127.0.0.1";
     const PORT = 3000;
 
-    const messages = document.querySelector("#messages");
     const socket = new WebSocket(`ws://${HOST}:${PORT}/`);
+
+    const data = {
+        id: Math.round(Math.random() * 100),
+        name: "Testing Name"
+    };
+
+    const messages = document.querySelector("#messages");
 
     socket.onopen = (event) => {
         console.log("Server connected successfully!");
-        
-        const data = {
-            id: Math.round(Math.random() * 100),
-            name: "Testing Name"
-        };
 
         socket.send(JSON.stringify(data));
-    }
-
+    };
     socket.onmessage = (message) => messages.innerHTML = message.data;
     socket.onerror = (error) => console.error("An error occurred!", error);
     socket.onclose = (event) => console.log("Server disconnected successfully!");
+
+    setTimeout(() => socket.send(JSON.stringify({ brah: "Cwen" })), 1000);
 </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
-import { createKey } from "@/data/hash";
-import { decode, read } from "@/data/buffer";
+import { createKey } from "../data/hash";
+import { decode } from "../data/buffer";
+import { Logger } from "../utils/logger";
 
 import { IncomingMessage } from "node:http";
 import { Duplex } from "node:stream";
@@ -49,14 +50,7 @@ function readable(socket: Duplex): void {
     const decoded: Buffer = decode(encoded, maskKey);
     const received: string = decoded.toString("utf-8");
 
-    const data = JSON.parse(received);
-
-    const message: Buffer = read({
-        message: data,
-        at: new Date().toISOString(),
-    });
-
-    socket.write(message);
+    new Logger().log(received);
 }
 
 export function upgrade(
@@ -72,4 +66,7 @@ export function upgrade(
 
     socket.write(headers({ privateKey: key }));
     socket.on("readable", () => readable(socket));
+    socket.on("close", () => console.log("closed"));
+
+    setTimeout(() => socket.write(JSON.stringify({ brah: "Cwen" })), 1000);
 }

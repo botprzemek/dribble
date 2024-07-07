@@ -8,13 +8,19 @@
         "moduleResolution": "node",
         "outDir": "./dist",
         "paths": {
-            "@/*": [ "src/*" ],
+            "@/*": [
+                "src/*"
+            ]
         },
         "rootDir": "./",
         "strict": true,
         "skipLibCheck": true,
         "target": "ES2022"
     },
-    "include": ["./**/*"],
-    "exclude": ["./node_modules"]
+    "include": [
+        "./src/*"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
 }

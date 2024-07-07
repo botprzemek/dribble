@@ -1,4 +1,4 @@
-import { Space } from "@/models/space";
+import { Space } from "./space";
 
 import { randomUUID, UUID } from "node:crypto";
 

@@ -1,4 +1,4 @@
-import { Client } from "@/models/client";
+import { Client } from "./client";
 
 import { randomUUID, UUID } from "node:crypto";
 

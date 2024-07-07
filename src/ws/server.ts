@@ -1,6 +1,6 @@
-import { upgrade } from "@/ws/socket";
-import { getServer, Server as ServerConfig } from "@/utils/config";
-import { Logger } from "@/utils/logger";
+import { upgrade } from "./socket";
+import { getServer, Server as ServerConfig } from "../utils/config";
+import { Logger } from "../utils/logger";
 
 import { createServer, Server } from "node:http";
 

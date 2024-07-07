@@ -1,29 +1,28 @@
 {
-  "name": "dribble",
-  "version": "1.0.0",
-  "description": "D.R.I.B.B.L.E. - Dynamic Real-time Interactive Basketball Live Environment",
-  "main": "./src",
-  "type": "module",
-  "scripts": {
-    "build": "npx tsc",
-    "start": "tsx .",
-    "dev": "tsx watch .",
-    "test": "echo \\\"Error: no test.txt specified\\\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/not-byte/dribble.git"
-  },
-  "author": "",
-  "license": "SEE LICENSE IN https://github.com/not-byte/LICENSE",
-  "bugs": {
-    "url": "https://github.com/not-byte/dribble/issues"
-  },
-  "homepage": "https://github.com/not-byte/dribble#readme",
-  "devDependencies": {
-    "@types/node": "^20.14.2",
-    "prettier": "3.3.2",
-    "tsx": "^4.15.2",
-    "typescript": "^5.4.5"
-  }
+    "name": "dribble",
+    "version": "1.0.0",
+    "description": "D.R.I.B.B.L.E. - Dynamic Real-time Interactive Basketball Live Environment",
+    "author": "botprzemek",
+    "license": "SEE LICENSE IN https://github.com/not-byte/LICENSE",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/not-byte/dribble.git"
+    },
+    "bugs": {
+        "url": "https://github.com/not-byte/dribble/issues"
+    },
+    "homepage": "https://github.com/not-byte/dribble#readme",
+    "main": "./src",
+    "type": "module",
+    "scripts": {
+        "build": "tsc -b && tsc-alias",
+        "start": "node ./dist/src/index.js",
+        "dev": "tsx watch ."
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.2",
+        "prettier": "3.3.2",
+        "tsc-alias": "^1.8.10",
+        "tsx": "^4.15.2"
+    }
 }
